@@ -12,6 +12,19 @@ struct VertexPosCol
 	XMFLOAT4 Color;
 };
 
+struct VertexBezier
+{
+public:
+
+	VertexBezier() {};
+	VertexBezier(XMFLOAT3 p0, XMFLOAT3 p1, XMFLOAT3 p2, XMFLOAT3 p3 ) :
+		P0(p0), P1(p1), P2(p2), P3(p3){}
+	XMFLOAT3 P0;
+	XMFLOAT3 P1;
+	XMFLOAT3 P2;
+	XMFLOAT3 P3;
+};
+
 struct VertexPosNormCol
 {
 public:

@@ -20,7 +20,7 @@ protected:
 private:
 	ID3D11Buffer * m_pVertexBuffer;
 
-	std::vector<VertexPosCol> m_Verts;
+	std::vector<VertexBezier> m_Verts;
 	ID3DX11Effect* m_pEffect;
 	ID3DX11EffectTechnique* m_pTechnique;
 	ID3D11InputLayout* m_pInputLayout;
