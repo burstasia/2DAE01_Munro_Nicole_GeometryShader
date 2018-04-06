@@ -50,6 +50,14 @@ struct AnimationClip
 	vector<AnimationKey> Keys;
 };
 
+struct Bezier
+{
+	XMFLOAT3 P0;
+	XMFLOAT3 P1;
+	XMFLOAT3 P2;
+	XMFLOAT3 P3;
+
+};
 class MeshFilter final
 {
 public:
@@ -81,6 +89,8 @@ private:
 	vector<XMFLOAT4> m_BlendIndices;
 	vector<XMFLOAT4> m_BlendWeights;
 	vector<AnimationClip> m_AnimationClips;
+	vector<Bezier> m_BezierPoints;
+
 	bool m_HasAnimations;
 	USHORT m_BoneCount;
 
@@ -95,6 +105,7 @@ private:
 	static XMFLOAT4 m_DefaultFloat4;
 	static XMFLOAT3 m_DefaultFloat3;
 	static XMFLOAT2 m_DefaultFloat2;
+	static Bezier m_DefaultBezier;
 
 private:
 	// -------------------------

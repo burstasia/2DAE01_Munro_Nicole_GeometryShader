@@ -98,6 +98,8 @@ xcopy "$(OV_LIBS)\Fmod\bin\*" "$(OutDir)" /y/D</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Materials\BezierMaterial.cpp" />
+    <ClCompile Include="CourseObjects\GeomShader\BezierScene.cpp" />
     <ClCompile Include="CourseObjects\Week 2\CharacterTestScene.cpp" />
     <ClCompile Include="CourseObjects\Week 1\ComponentTestScene.cpp" />
     <ClCompile Include="CourseObjects\Week 1\TestScene.cpp" />
@@ -138,6 +140,8 @@ xcopy "$(OV_LIBS)\Fmod\bin\*" "$(OutDir)" /y/D</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Materials\BezierMaterial.h" />
+    <ClInclude Include="CourseObjects\GeomShader\BezierScene.h" />
     <ClInclude Include="CourseObjects\Week 2\CharacterTestScene.h" />
     <ClInclude Include="CourseObjects\Week 1\ComponentTestScene.h" />
     <ClInclude Include="CourseObjects\Week 1\TestScene.h" />

@@ -22,6 +22,8 @@
     <ClCompile Include="CourseObjects\Week6\SoftwareSkinningScene_2.cpp" />
     <ClCompile Include="CourseObjects\Week 7\HardwareSkinningScene.cpp" />
     <ClCompile Include="Materials\SkinnedDiffuseMaterial.cpp" />
+    <ClCompile Include="CourseObjects\GeomShader\BezierScene.cpp" />
+    <ClCompile Include="Materials\BezierMaterial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainGame.h" />
@@ -44,5 +46,7 @@
     <ClInclude Include="CourseObjects\Week6\SoftwareSkinningScene_2.h" />
     <ClInclude Include="CourseObjects\Week 7\HardwareSkinningScene.h" />
     <ClInclude Include="Materials\SkinnedDiffuseMaterial.h" />
+    <ClInclude Include="CourseObjects\GeomShader\BezierScene.h" />
+    <ClInclude Include="Materials\BezierMaterial.h" />
   </ItemGroup>
 </Project>

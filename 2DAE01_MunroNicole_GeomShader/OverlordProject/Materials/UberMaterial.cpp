@@ -10,30 +10,6 @@ ID3DX11EffectShaderResourceVariable* UberMaterial::m_pEnvironmentSRVvariable = n
 ID3DX11EffectShaderResourceVariable* UberMaterial::m_pSpecularLevelSRVvariable = nullptr;
 ID3DX11EffectShaderResourceVariable* UberMaterial::m_pOpacitySRVvariable = nullptr;
 
-//ID3DX11EffectVectorVariable* UberMaterial::m_pLightDirectionVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUseDiffuseTextureVariable = nullptr;
-//ID3DX11EffectVectorVariable* UberMaterial::m_pDiffuseColorVariable = nullptr;
-//ID3DX11EffectVectorVariable* UberMaterial::m_pSpecularColorVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUseSpecularLevelTextureVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pShininessVariable = nullptr;
-//ID3DX11EffectVectorVariable* UberMaterial::m_pAmbientColorVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pAmbientIntensityVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pFlipGreenChannelVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUseNormalMappingVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUseEnvironmentMappingVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pReflectionStrengthVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pRefractionStrengthVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pRefractionIndexVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pOpacityVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUseOpacityMapVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUseBlinnVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUsePhongVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pUseFresnelFalloffVariable = nullptr;
-//ID3DX11EffectVectorVariable* UberMaterial::m_pFresnelColorVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pFresnelPowerVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pFresnelMultiplierVariable = nullptr;
-//ID3DX11EffectScalarVariable* UberMaterial::m_pFresnelHardnessVariable = nullptr;
-
 UberMaterial::UberMaterial()
 	:Material(L" ./Resources/Effects/UberShader_Start.fx", L"WithAlphaBlending")
 {

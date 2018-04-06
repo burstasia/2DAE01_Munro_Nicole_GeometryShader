@@ -12,7 +12,8 @@ enum ILSemantic : UINT
 	BINORMAL = (1 << 4),
 	TANGENT = (1 << 5),
 	BLENDINDICES = (1 << 6),
-	BLENDWEIGHTS = (1 << 7)
+	BLENDWEIGHTS = (1 << 7),
+	BEZIER = (1 << 8)
 };
 
 struct ILDescription
@@ -48,6 +49,7 @@ private:
 		m.insert ( std::pair<ILSemantic,wstring>(ILSemantic::TANGENT, L"TANGENT") );
 		m.insert ( std::pair<ILSemantic,wstring>(ILSemantic::BLENDINDICES, L"BLENDINDICES") );
 		m.insert ( std::pair<ILSemantic,wstring>(ILSemantic::BLENDWEIGHTS, L"BLENDWEIGHTS") );
+		m.insert(std::pair<ILSemantic, wstring>(ILSemantic::BEZIER, L"BEZIER"));
 		return m;
 	}
 	static std::map<ILSemantic, wstring> m_IlSemanticName;

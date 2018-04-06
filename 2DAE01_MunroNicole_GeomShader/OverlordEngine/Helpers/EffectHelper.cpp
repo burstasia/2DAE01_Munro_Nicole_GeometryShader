@@ -81,6 +81,7 @@ bool EffectHelper::BuildInputLayout(ID3D11Device* pDevice, ID3DX11EffectTechniqu
 		else if (strcmp(signParDesc.SemanticName, "BINORMAL") == 0)ilDescription.SemanticType = ILSemantic::BINORMAL;
 		else if (strcmp(signParDesc.SemanticName, "BLENDINDICES") == 0)ilDescription.SemanticType = ILSemantic::BLENDINDICES;
 		else if (strcmp(signParDesc.SemanticName, "BLENDWEIGHTS") == 0)ilDescription.SemanticType = ILSemantic::BLENDWEIGHTS;
+		else if (strcmp(signParDesc.SemanticName, "BEZIER") == 0)ilDescription.SemanticType = ILSemantic::BEZIER;
 		else Logger::LogFormat(LogLevel::Error, L"EffectHelper::BuildInputLayout() => Semantic Type \"%s\" is not supported!", signParDesc.SemanticName);
 
 		//Enable corresponding BitFlag

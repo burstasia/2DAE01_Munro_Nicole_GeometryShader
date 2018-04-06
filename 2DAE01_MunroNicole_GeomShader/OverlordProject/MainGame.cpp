@@ -13,6 +13,8 @@
 #define W6
 #define W7
 
+#define GEOMSHADER
+
 #ifdef W1
 #include "CourseObjects/Week 1/TestScene.h"
 #include "CourseObjects/Week 1/ComponentTestScene.h"
@@ -34,6 +36,9 @@
 #include "CourseObjects/Week 7/HardwareSkinningScene.h"
 #endif
 
+#ifdef GEOMSHADER
+#include "CourseObjects/GeomShader/BezierScene.h"
+#endif
 
 MainGame::MainGame(void)
 {
@@ -55,31 +60,36 @@ void MainGame::Initialize()
 {
 
 #ifdef W1
-	SceneManager::GetInstance()->AddGameScene(new TestScene());
-	SceneManager::GetInstance()->AddGameScene(new ComponentTestScene());
+	//SceneManager::GetInstance()->AddGameScene(new TestScene());
+	//SceneManager::GetInstance()->AddGameScene(new ComponentTestScene());
 
 	//SceneManager::GetInstance()->SetActiveGameScene(L"TestScene");
 #endif
 
 #ifdef W2
-	SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
+	//SceneManager::GetInstance()->AddGameScene(new ModelTestScene());
 
 	//SceneManager::GetInstance()->SetActiveGameScene(L"ModelTestScene");
 #endif
 
 #ifdef W3
-	SceneManager::GetInstance()->AddGameScene(new SpikeyScene);
+	//SceneManager::GetInstance()->AddGameScene(new SpikeyScene);
 
 #endif
 
 #ifdef W6
-	SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_1);
+	//SceneManager::GetInstance()->AddGameScene(new SoftwareSkinningScene_1);
 
 #endif
 
 #ifdef W7
-	SceneManager::GetInstance()->AddGameScene(new HardwareSkinningScene);
+	//::GetInstance()->AddGameScene(new HardwareSkinningScene);
 #endif
+
+#ifdef GEOMSHADER
+	SceneManager::GetInstance()->AddGameScene(new BezierScene);
+#endif
+
 }
 
 LRESULT MainGame::WindowProcedureHook(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

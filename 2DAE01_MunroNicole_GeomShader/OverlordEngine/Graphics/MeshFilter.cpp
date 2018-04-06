@@ -11,6 +11,7 @@ XMFLOAT4 MeshFilter::m_DefaultColor = XMFLOAT4(1,0,0,1);
 XMFLOAT4 MeshFilter::m_DefaultFloat4 = XMFLOAT4(0, 0, 0, 0);
 XMFLOAT3 MeshFilter::m_DefaultFloat3 = XMFLOAT3(0, 0, 0);
 XMFLOAT2 MeshFilter::m_DefaultFloat2 = XMFLOAT2(0, 0);
+Bezier MeshFilter::m_DefaultBezier = Bezier{ {0,0,0 }, { 0,0,0 }, { 0,0,0 }, { 0,0,0} };
 
 MeshFilter::MeshFilter():
 			m_Positions(vector<XMFLOAT3>()),
@@ -145,6 +146,8 @@ void MeshFilter::BuildVertexBuffer(const GameContext& gameContext, Material* pMa
 			case ILSemantic::BLENDWEIGHTS:
 				memcpy(pDataLocation, HasElement(ilDescription.SemanticType) ? &m_BlendWeights[i] : &m_DefaultFloat4, ilDescription.Offset);
 				break;
+			case ILSemantic::BEZIER:
+				memcpy(pDataLocation, HasElement(ilDescription.SemanticType) ? &m_BezierPoints[i] : &m_DefaultBezier, ilDescription.Offset);
 			default:
 				Logger::LogError(L"MeshFilter::BuildVertexBuffer() > Unsupported SemanticType!");
 				break;
