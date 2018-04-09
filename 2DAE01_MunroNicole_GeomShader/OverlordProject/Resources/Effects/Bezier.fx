@@ -95,6 +95,7 @@ void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
         float3 posRight = first + (right * radius);
         float3 posForward = first + (forwardVec * radius);
 
+        //drawing axis things
         CreateVertex(triStream, first, float3(0, 0, 0), float4(1, 0, 0, 1));
         CreateVertex(triStream, posUp, float3(0, 0, 0), float4(1, 0, 0, 1));
         triStream.RestartStrip();
@@ -104,6 +105,13 @@ void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
         CreateVertex(triStream, first, float3(0, 0, 0), float4(1, 0, 0, 1));
         CreateVertex(triStream, posForward, float3(0, 0, 0), float4(0, 0, 1, 1));
         triStream.RestartStrip();
+
+        //create circle
+        //for (int i = 0; i < 8; i ++)
+        //{
+        //    float3 y 
+        //}
+
 
     }
     //triStream.RestartStrip();
