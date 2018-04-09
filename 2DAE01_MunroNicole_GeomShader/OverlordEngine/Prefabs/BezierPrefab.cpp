@@ -107,7 +107,7 @@ void BezierPrefab::Draw(const GameContext& gameContext)
 	XMMATRIX wvp = world * viewProjection;
 	m_pWvpVar->SetMatrix(reinterpret_cast<float*>(&wvp));
 
-	gameContext.pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	gameContext.pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	gameContext.pDeviceContext->IASetInputLayout(m_pInputLayout);
 
 	UINT offset = 0;
