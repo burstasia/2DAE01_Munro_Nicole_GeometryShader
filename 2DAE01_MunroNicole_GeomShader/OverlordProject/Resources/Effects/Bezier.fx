@@ -1,8 +1,10 @@
 float4x4 gWorld : WORLD;
 float4x4 gWorldViewProj : WORLDVIEWPROJECTION; 
 float3 gLightDirection = float3(-0.577f, -0.577f, 0.577f);
-int gNumSegments = int(10);
-int gNumCircleSides = int(8);
+int gNumSegments = int(5);
+int gNumCircleSides = int(6);
+
+static const float TWO_PI = 6.28318530718f;
 
 struct VS_INPUT{
 	float3 pos[4] : BEZIER;
@@ -63,7 +65,7 @@ void CreateVertex(inout LineStream<GS_OUTPUT> triStream, float3 pos, float3 norm
 //--------------------------------------------------------------------------------------
 // Geometry Shader
 //--------------------------------------------------------------------------------------
-[maxvertexcount(90)]
+[maxvertexcount(93)]
 void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
 {
     float3 p1 = input[0].pos[0];
@@ -74,7 +76,11 @@ void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
     float delta = 1.0f / gNumSegments;
     float t;
 
-    //float angleIncrement = 
+    float angleIncrement = TWO_PI / (float) gNumCircleSides;
+
+    float3 leftTrackVerts[];
+    float3 rightTrackVerts[];
+
     for (int i = 0; i <= gNumSegments; i++)
     {
         t = saturate(delta * float(i));
@@ -92,17 +98,36 @@ void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
         //create circle
         float currAngle = 0.0f;
         
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < gNumCircleSides + 1; i++)
         {
             float3 y = radius * sin(currAngle) * up;
             float3 x = radius * cos(currAngle) * right;
 
-            CreateVertex(triStream, y + x + first, float3(0, 0, 0), float4(1, 0, 0, 1));
+            rightTrackVerts[i] = y + x + first + right;
 
-            currAngle += 0.78f;
+            CreateVertex(triStream, y + x + first + right, float3(0, 0, 0), float4(1, 0, 0, 1));
+
+            currAngle += angleIncrement;
             
         }
         triStream.RestartStrip();
+
+        for (int i = 0; i < gNumCircleSides + 1; i++)
+        {
+            float3 y = radius * sin(currAngle) * up;
+            float3 x = radius * cos(currAngle) * right;
+
+            CreateVertex(triStream, y + x + first - right, float3(0, 0, 0), float4(1, 0, 0, 1));
+
+            currAngle += angleIncrement;
+            
+        }
+        triStream.RestartStrip();
+
+        //TODO: create box
+
+
+        //create triangles
     }
 
 }
