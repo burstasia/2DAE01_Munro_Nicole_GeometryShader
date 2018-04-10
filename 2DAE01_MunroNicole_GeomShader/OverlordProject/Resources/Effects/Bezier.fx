@@ -2,6 +2,7 @@ float4x4 gWorld : WORLD;
 float4x4 gWorldViewProj : WORLDVIEWPROJECTION; 
 float3 gLightDirection = float3(-0.577f, -0.577f, 0.577f);
 int gNumSegments = int(10);
+int gNumCircleSides = int(8);
 
 struct VS_INPUT{
 	float3 pos[4] : BEZIER;
@@ -65,56 +66,44 @@ void CreateVertex(inout LineStream<GS_OUTPUT> triStream, float3 pos, float3 norm
 [maxvertexcount(90)]
 void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
 {
-    //CreateVertex(triStream, input[0].pos[0], float3(0, 0, 0), float4(1, 1, 1, 1));
-   // CreateVertex(triStream, input[0].pos[1], float3(0, 0, 0), float4(1, 1, 1, 1));
-    //CreateVertex(triStream, input[0].pos[2], float3(0, 0, 0), float4(1, 1, 1, 1));
-    //CreateVertex(triStream, input[0].pos[3], float3(0, 0, 0), float4(1, 1, 1, 1));
+    float3 p1 = input[0].pos[0];
+    float3 p2 = input[0].pos[1];
+    float3 p3 = input[0].pos[2];
+    float3 p4 = input[0].pos[3];
 
     float delta = 1.0f / gNumSegments;
     float t;
 
+    //float angleIncrement = 
     for (int i = 0; i <= gNumSegments; i++)
     {
         t = saturate(delta * float(i));
-        //CreateVertex(triStream, ToBezier(t, input[0].pos[0], input[0].pos[1], input[0].pos[2], input[0].pos[3]), float3(0, 0, 0), float4(1, 0, 1, 1));
-
-        float3 first = ToBezier(t, input[0].pos[0], input[0].pos[1], input[0].pos[2], input[0].pos[3]);
+        float3 first = ToBezier(t, p1, p2, p3, p4);
         t += 0.01;
-        float3 second = ToBezier(t, input[0].pos[0], input[0].pos[1], input[0].pos[2], input[0].pos[3]);
+        float3 second = ToBezier(t, p1, p2, p3, p4);
 
         float3 forwardVec = normalize(second - first);
-        float3 up = float3(0, 1, 0); //CORRECT
-
+        float3 up = float3(0, 1, 0);
         float3 right = normalize(cross(up, forwardVec));
-
         up = normalize(cross(forwardVec, right));
 
         float radius = 1.0f;
 
-        float3 posUp = first + (up * radius);
-        float3 posRight = first + (right * radius);
-        float3 posForward = first + (forwardVec * radius);
-
-        //drawing axis things
-        CreateVertex(triStream, first, float3(0, 0, 0), float4(1, 0, 0, 1));
-        CreateVertex(triStream, posUp, float3(0, 0, 0), float4(1, 0, 0, 1));
-        triStream.RestartStrip();
-        CreateVertex(triStream, first, float3(0, 0, 0), float4(1, 0, 0, 1));
-        CreateVertex(triStream, posRight, float3(0, 0, 0), float4(0, 1, 0, 1));
-        triStream.RestartStrip();
-        CreateVertex(triStream, first, float3(0, 0, 0), float4(1, 0, 0, 1));
-        CreateVertex(triStream, posForward, float3(0, 0, 0), float4(0, 0, 1, 1));
-        triStream.RestartStrip();
-
         //create circle
-        //for (int i = 0; i < 8; i ++)
-        //{
-        //    float3 y 
-        //}
+        float currAngle = 0.0f;
+        
+        for (int i = 0; i < 9; i++)
+        {
+            float3 y = radius * sin(currAngle) * up;
+            float3 x = radius * cos(currAngle) * right;
 
+            CreateVertex(triStream, y + x + first, float3(0, 0, 0), float4(1, 0, 0, 1));
 
+            currAngle += 0.78f;
+            
+        }
+        triStream.RestartStrip();
     }
-    //triStream.RestartStrip();
 
 }
 

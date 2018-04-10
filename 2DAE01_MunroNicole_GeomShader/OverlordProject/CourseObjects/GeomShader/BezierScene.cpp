@@ -16,7 +16,7 @@ void BezierScene::Initialize(const GameContext & gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
 
-	m_pBezier = new BezierPrefab({0,10,0}, {2,20,0}, {4,20,0}, {6,10,0});
+	m_pBezier = new BezierPrefab({0,10,20}, {10,5,5}, {20,30,0}, {30,10,0});
 
 	//m_pBezier->Initialize(gameContext);
 
