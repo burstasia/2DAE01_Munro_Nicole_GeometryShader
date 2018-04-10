@@ -48,7 +48,7 @@ float3 ToBezier(float t, float3 P0, float3 P1, float3 P2, float3 P3)
 
 }
 
-void CreateVertex(inout LineStream<GS_OUTPUT> triStream, float3 pos, float3 normal, float4 color)
+void CreateVertex(inout TriangleStream<GS_OUTPUT> triStream, float3 pos, float3 normal, float4 color)
 {
     GS_OUTPUT temp = (GS_OUTPUT) 0;
 
@@ -66,7 +66,7 @@ void CreateVertex(inout LineStream<GS_OUTPUT> triStream, float3 pos, float3 norm
 // Geometry Shader
 //--------------------------------------------------------------------------------------
 [maxvertexcount(93)]
-void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
+void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
 {
     float3 p1 = input[0].pos[0];
     float3 p2 = input[0].pos[1];
@@ -78,8 +78,8 @@ void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
 
     float angleIncrement = TWO_PI / (float) gNumCircleSides;
 
-    float3 leftTrackVerts[];
-    float3 rightTrackVerts[];
+    float3 leftTrackVerts[50];
+    float3 rightTrackVerts[50];
 
     for (int i = 0; i <= gNumSegments; i++)
     {
@@ -93,43 +93,60 @@ void GS(point VS_INPUT input[1], inout LineStream<GS_OUTPUT> triStream)
         float3 right = normalize(cross(up, forwardVec));
         up = normalize(cross(forwardVec, right));
 
-        float radius = 1.0f;
+        float radius = 0.5f;
 
         //create circle
         float currAngle = 0.0f;
         
-        for (int i = 0; i < gNumCircleSides + 1; i++)
+        for (int l = 0; l < gNumCircleSides + 1; l++)
         {
             float3 y = radius * sin(currAngle) * up;
             float3 x = radius * cos(currAngle) * right;
 
-            rightTrackVerts[i] = y + x + first + right;
+           rightTrackVerts[l] = y + x + first + right;
 
-            CreateVertex(triStream, y + x + first + right, float3(0, 0, 0), float4(1, 0, 0, 1));
+           // CreateVertex(triStream, y + x + first + (right * 1.75f), float3(0, 0, 0), float4(1, 0, 0, 1));
 
             currAngle += angleIncrement;
             
         }
-        triStream.RestartStrip();
+      //  triStream.RestartStrip();
 
-        for (int i = 0; i < gNumCircleSides + 1; i++)
+        for (int t = 0; t < gNumCircleSides + 1; t++)
         {
             float3 y = radius * sin(currAngle) * up;
             float3 x = radius * cos(currAngle) * right;
 
-            CreateVertex(triStream, y + x + first - right, float3(0, 0, 0), float4(1, 0, 0, 1));
+            leftTrackVerts[t] = y + x + first - (right * 1.75f);
+           // CreateVertex(triStream, y + x + first - (right * 1.75f), float3(0, 0, 0), float4(1, 0, 0, 1));
 
             currAngle += angleIncrement;
             
         }
-        triStream.RestartStrip();
-
+       // triStream.RestartStrip();
+    
         //TODO: create box
-
-
-        //create triangles
     }
 
+    CreateVertex(triStream, rightTrackVerts[0], float3(0, 0, 0), float4(1, 0, 0, 1));
+    CreateVertex(triStream, rightTrackVerts[2], float3(0, 0, 0), float4(1, 0, 0, 1));
+    CreateVertex(triStream, rightTrackVerts[1], float3(0, 0, 0), float4(1, 0, 0, 1));
+    //CreateVertex(triStream, rightTrackVerts[8], float3(0, 0, 0), float4(1, 0, 0, 1));
+    triStream.RestartStrip();
+     //TODO: create triangles
+    //for (int k = 0; k <= gNumSegments; k++)
+    //{
+    //    for (int j = 0; j < gNumCircleSides + 1; j++)
+    //    {
+    //        CreateVertex(triStream, leftTrackVerts[j], float3(0, 0, 0), float4(1, 0, 0, 1));
+    //        CreateVertex(triStream, leftTrackVerts[j +  1], float3(0, 0, 0), float4(1, 0, 0, 1));
+    //        CreateVertex(triStream, leftTrackVerts[j + gNumCircleSides + 1], float3(0, 0, 0), float4(1, 0, 0, 1));
+    //        //CreateVertex(triStream, leftTrackVerts[j + gNumCircleSides + 2], float3(0, 0, 0), float4(1, 0, 0, 1));
+
+    //        triStream.RestartStrip();
+    //    }
+
+    //}
 }
 
 //--------------------------------------------------------------------------------------
