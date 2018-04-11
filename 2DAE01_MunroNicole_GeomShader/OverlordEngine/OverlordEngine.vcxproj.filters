@@ -56,6 +56,8 @@
     <ClCompile Include="Components\SpriteComponent.cpp" />
     <ClCompile Include="Components\TerrainComponent.cpp" />
     <ClCompile Include="Components\TransformComponent.cpp" />
+    <ClCompile Include="EngineMaterials\BezierMaterial.cpp" />
+    <ClCompile Include="Components\MaterialComponentBezier.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base\OverlordGame.h" />
@@ -121,5 +123,7 @@
     <ClInclude Include="Components\SpriteComponent.h" />
     <ClInclude Include="Components\TerrainComponent.h" />
     <ClInclude Include="Components\TransformComponent.h" />
+    <ClInclude Include="EngineMaterials\BezierMaterial.h" />
+    <ClInclude Include="Components\MaterialComponentBezier.h" />
   </ItemGroup>
 </Project>

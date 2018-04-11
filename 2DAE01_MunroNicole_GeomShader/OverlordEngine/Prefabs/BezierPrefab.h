@@ -1,42 +1,31 @@
 #pragma once
 #include "..\Scenegraph\GameObject.h"
 
+class BezierMaterial;
+class MaterialComponentBezier;
+
 class BezierPrefab: public GameObject
 {
 public:
-	BezierPrefab(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3);
+	BezierPrefab(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3, 
+		float radius, int segs, int circleSides, bool left, bool right);
 	~BezierPrefab();
 
-	void LoadEffect(const GameContext& gameContext);
-	void InitializeBuffer(const GameContext& gameContext);
-	void UpdateBuffer();
-	void Update(const GameContext& gameContext);
-	void Draw(const GameContext& gameContext);
-	void SetNumSegments(int numSegs);
-	void SetRightTrack(bool isRight);
-	void SetLeftTrack(bool isLeft);
-
+	
 protected:
-
-	virtual void Initialize(const GameContext& gameContext);
+	virtual void Update(const GameContext& gameContext) override;
+	virtual void Draw(const GameContext& gameContext) override;
+	virtual void Initialize(const GameContext& gameContext) override;
 
 private:
-	ID3D11Buffer * m_pVertexBuffer;
 
-	std::vector<VertexBezier> m_Verts;
-	ID3DX11Effect* m_pEffect;
-	ID3DX11EffectTechnique* m_pTechnique;
-	ID3D11InputLayout* m_pInputLayout;
-	static ID3DX11EffectMatrixVariable *m_pWorldVar, *m_pWvpVar;
+	float m_Radius;
+	int m_SegmentCount;
+	int m_CircleSides;
+	bool m_IsLeft;
+	bool m_IsRight;
 
-	ID3DX11EffectScalarVariable* m_pNumSegments;
-	int m_NumSegments;
-
-	ID3DX11EffectScalarVariable* m_pLeftTrack;
-	bool m_LeftTrack;
-
-	ID3DX11EffectScalarVariable* m_pRightTrack;
-	bool m_RightTrack;
+	MaterialComponentBezier* m_pBezierMatComponent;
 
 private:
 	// -------------------------

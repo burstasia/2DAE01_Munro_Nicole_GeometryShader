@@ -96,6 +96,8 @@ xcopy "$(OV_LIBS)\Fmod\bin\*" "$(OutDir)" /y/D</Command>
   <ItemGroup>
     <ClInclude Include="Base\MaterialManager.h" />
     <ClInclude Include="Base\SoundManager.h" />
+    <ClInclude Include="EngineMaterials\BezierMaterial.h" />
+    <ClInclude Include="Components\MaterialComponentBezier.h" />
     <ClInclude Include="Prefabs\BezierPrefab.h" />
     <ClInclude Include="Graphics\ModelAnimator.h" />
     <ClInclude Include="Scenegraph\BoneObject.h" />
@@ -165,6 +167,8 @@ xcopy "$(OV_LIBS)\Fmod\bin\*" "$(OutDir)" /y/D</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="EngineMaterials\BezierMaterial.cpp" />
+    <ClCompile Include="Components\MaterialComponentBezier.cpp" />
     <ClCompile Include="Prefabs\BezierPrefab.cpp" />
     <ClCompile Include="Graphics\ModelAnimator.cpp" />
     <ClCompile Include="Scenegraph\BoneObject.cpp" />
