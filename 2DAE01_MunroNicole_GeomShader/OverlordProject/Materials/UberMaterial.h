@@ -1,6 +1,5 @@
 #pragma once
 #include "Graphics\Material.h"
-//#include "Physx/OverlordSimulationFilterShader.h"
 
 class TextureData;
 

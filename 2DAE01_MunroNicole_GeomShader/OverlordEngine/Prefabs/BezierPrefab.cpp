@@ -15,7 +15,9 @@ BezierPrefab::BezierPrefab(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3):
 	m_pVertexBuffer(nullptr),
 	m_pEffect(nullptr),
 	m_pTechnique(nullptr),
-	m_pInputLayout(nullptr)
+	m_pInputLayout(nullptr),
+	m_LeftTrack(false),
+	m_RightTrack(false)
 {
 	m_Verts.push_back({ P0 , P1 , P2 ,P3});
 
@@ -45,16 +47,20 @@ void BezierPrefab::LoadEffect(const GameContext& gameContext)
 	UINT inputLayoutSize;
 	UINT inLayID;
 
-	
-	EffectHelper::BuildInputLayout(gameContext.pDevice, m_pTechnique, &m_pInputLayout, description, inputLayoutSize,inLayID);
 
-	
+	EffectHelper::BuildInputLayout(gameContext.pDevice, m_pTechnique, &m_pInputLayout, description, inputLayoutSize, inLayID);
 
-	if (!m_pWorldVar) 
+
+
+	if (!m_pWorldVar)
 		m_pWorldVar = m_pEffect->GetVariableBySemantic("World")->AsMatrix();
 
 	if (!m_pWvpVar)
 		m_pWvpVar = m_pEffect->GetVariableBySemantic("WorldViewProjection")->AsMatrix();
+
+	m_pNumSegments = m_pEffect->GetVariableByName("gNumSegments")->AsScalar();
+	m_pLeftTrack = m_pEffect->GetVariableByName("gIsLeft")->AsScalar();
+	m_pRightTrack = m_pEffect->GetVariableByName("gIsRight")->AsScalar();
 }
 
 void BezierPrefab::InitializeBuffer(const GameContext& gameContext)
@@ -78,8 +84,14 @@ void BezierPrefab::UpdateBuffer()
 
 
 	auto size = m_Verts.size();
-
 	if (size == 0)return;
+
+	m_pNumSegments->SetInt(m_NumSegments);
+	m_pLeftTrack->SetBool(m_LeftTrack);
+	m_pRightTrack->SetBool(m_RightTrack);
+
+	
+	
 	
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -91,6 +103,8 @@ void BezierPrefab::UpdateBuffer()
 void BezierPrefab::Update(const GameContext& gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
+
+
 }
 
 void BezierPrefab::Draw(const GameContext& gameContext)
@@ -121,4 +135,19 @@ void BezierPrefab::Draw(const GameContext& gameContext)
 		m_pTechnique->GetPassByIndex(p)->Apply(0, gameContext.pDeviceContext);
 		gameContext.pDeviceContext->Draw(m_Verts.size(), 0);
 	}
+}
+
+void BezierPrefab::SetNumSegments(int numSegs)
+{
+	m_NumSegments = numSegs;
+}
+
+void BezierPrefab::SetRightTrack(bool isRight)
+{
+	m_RightTrack = isRight;
+}
+
+void BezierPrefab::SetLeftTrack(bool isLeft)
+{
+	m_LeftTrack = isLeft;
 }

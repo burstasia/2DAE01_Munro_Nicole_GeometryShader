@@ -3,6 +3,8 @@ float4x4 gWorldViewProj : WORLDVIEWPROJECTION;
 float3 gLightDirection = float3(-0.577f, -0.577f, 0.577f);
 int gNumSegments = int(5);
 int gNumCircleSides = int(3);
+bool gIsLeft;
+bool gIsRight;
 
 static const float TWO_PI = 6.28318530718f;
 
@@ -12,7 +14,7 @@ struct VS_INPUT{
 
 struct GS_OUTPUT{
 	float4 pos : SV_POSITION;
-	float4 color : COLOR;
+	float3 color : COLOR;
 	float3 normal : NORMAL;
 };
 
@@ -48,7 +50,7 @@ float3 ToBezier(float t, float3 P0, float3 P1, float3 P2, float3 P3)
 
 }
 
-void CreateVertex(inout TriangleStream<GS_OUTPUT> triStream, float3 pos, float3 normal, float4 color)
+void CreateVertex(inout TriangleStream<GS_OUTPUT> triStream, float3 pos, float3 normal, float3 color)
 {
     GS_OUTPUT temp = (GS_OUTPUT) 0;
 
@@ -98,70 +100,75 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
         //create circle
         float currAngle = 0.0f;
         
-        for (int l = 0; l <= gNumCircleSides ; l++)
-        {
-            float3 y = radius * sin(currAngle) * up;
-            float3 x = radius * cos(currAngle) * right;
+      //  if(gIsLeft == true)
+//{
+            for (int l = 0; l <= gNumCircleSides; l++)
+            {
+                float3 y = radius * sin(currAngle) * up;
+                float3 x = radius * cos(currAngle) * right;
 
-            rightTrackVerts[(gNumCircleSides * i) + l] = y + x + first + (right * 1.75f);
+                rightTrackVerts[(gNumCircleSides * i) + l] = y + x + first + (right * 1.75f);
 
-//            CreateVertex(triStream, y + x + first + (right * 1.75f), float3(0, 0, 0), float4(1, 0, 0, 1));
-
-            currAngle += angleIncrement;
+                currAngle += angleIncrement;
             
-        }
-      //  triStream.RestartStrip();
+            }
+     //   }
+     //   else if (gIsRight == true)
+      //  {
+            for (int t = 0; t <= gNumCircleSides; t++)
+            {
+                float3 y = radius * sin(currAngle) * up;
+                float3 x = radius * cos(currAngle) * right;
 
-        for (int t = 0; t <= gNumCircleSides ; t++)
-        {
-            float3 y = radius * sin(currAngle) * up;
-            float3 x = radius * cos(currAngle) * right;
+                leftTrackVerts[(gNumCircleSides * i) + t] = y + x + first - (right * 1.75f);
 
-            leftTrackVerts[(gNumCircleSides * i) + t] = y + x + first - (right * 1.75f);
-           // CreateVertex(triStream, y + x + first - (right * 1.75f), float3(0, 0, 0), float4(1, 0, 0, 1));
-
-            currAngle += angleIncrement;
+                currAngle += angleIncrement;
             
-        }
-       // triStream.RestartStrip();
+            }
+   //     }
+        
     
         //TODO: create box
     }
 
-    //CreateVertex(triStream, rightTrackVerts[0], float3(0, 0, 0), float4(1, 0, 0, 1));
-    //CreateVertex(triStream, rightTrackVerts[7], float3(0, 0, 0), float4(1, 0, 0, 1));
-    //CreateVertex(triStream, rightTrackVerts[1], float3(0, 0, 0), float4(1, 0, 0, 1));
-    //CreateVertex(triStream, rightTrackVerts[8], float3(0, 0, 0), float4(1, 0, 0, 1));
-  //  triStream.RestartStrip();
-
-     //TODO: create triangles
-    for (int k = 0; k <= gNumSegments; k++)
-    {
-        for (int j = 0; j < gNumCircleSides; j++)
+    //if(gIsLeft == true)
+    //{
+        for (int k = 0; k < gNumSegments; k++)
         {
-            if (j == gNumCircleSides) j = 0;
-            CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j], float3(0, 0, 0), float4(1, 0, 0, 1));
-            CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], float3(0, 0, 0), float4(1, 0, 0, 1));
-            CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], float3(0, 0, 0), float4(1, 0, 0, 1));
-            CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], float3(0, 0, 0), float4(1, 0, 0, 1));
+       
+            for (int j = 0; j < gNumCircleSides; j++)
+            {
+           
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j], float3(1, 0, 0), float3(1, 0, 0));
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], float3(0, 1, 0), float3(1, 0, 0));
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], float3(0, 1, 0), float3(1, 0, 0));
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], float3(0, 0, 1), float3(1, 0, 0));
 
-            triStream.RestartStrip();
+                triStream.RestartStrip();
+            }
+      
         }
-    }
-
-    for (int k = 0; k <= gNumSegments; k++)
-    {
-        for (int j = 0; j < gNumCircleSides; j++)
+   // }
+     //TODO: create triangles left Track
+  //  else if (gIsRight == true)
+  //  {
+        for (int k = 0; k < gNumSegments; k++)
         {
-            if (j == gNumCircleSides) j = 0;
-            CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j], float3(0, 0, 0), float4(1, 0, 0, 1));
-            CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], float3(0, 0, 0), float4(1, 0, 0, 1));
-            CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], float3(0, 0, 0), float4(1, 0, 0, 1));
-            CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], float3(0, 0, 0), float4(1, 0, 0, 1));
+       
+            for (int j = 0; j < gNumCircleSides; j++)
+            {
+           
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j], float3(1, 0, 0), float3(1, 0, 0));
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], float3(0, 1, 0), float3(1, 0, 0));
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], float3(0, 1, 0), float3(1, 0, 0));
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], float3(0, 0, 1), float3(1, 0, 0));
 
-            triStream.RestartStrip();
+                triStream.RestartStrip();
+            }
+      
         }
-    }
+  //  }
+  
 }
 
 //--------------------------------------------------------------------------------------
@@ -180,7 +187,6 @@ float4 PS(GS_OUTPUT input) : SV_TARGET
 {
 
 	float3 color_rgb= input.color.rgb;
-	float color_a = input.color.a;
 	
 	//HalfLambert Diffuse :)
 	float diffuseStrength = dot(input.normal, -gLightDirection);
@@ -188,7 +194,7 @@ float4 PS(GS_OUTPUT input) : SV_TARGET
 	diffuseStrength = saturate(diffuseStrength);
 	color_rgb = color_rgb * diffuseStrength;
 	
-	return float4( color_rgb , color_a );
+	return float4( color_rgb , 1 );
 }
 
 //--------------------------------------------------------------------------------------

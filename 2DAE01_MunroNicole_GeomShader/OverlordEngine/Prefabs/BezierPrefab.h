@@ -12,6 +12,9 @@ public:
 	void UpdateBuffer();
 	void Update(const GameContext& gameContext);
 	void Draw(const GameContext& gameContext);
+	void SetNumSegments(int numSegs);
+	void SetRightTrack(bool isRight);
+	void SetLeftTrack(bool isLeft);
 
 protected:
 
@@ -25,6 +28,16 @@ private:
 	ID3DX11EffectTechnique* m_pTechnique;
 	ID3D11InputLayout* m_pInputLayout;
 	static ID3DX11EffectMatrixVariable *m_pWorldVar, *m_pWvpVar;
+
+	ID3DX11EffectScalarVariable* m_pNumSegments;
+	int m_NumSegments;
+
+	ID3DX11EffectScalarVariable* m_pLeftTrack;
+	bool m_LeftTrack;
+
+	ID3DX11EffectScalarVariable* m_pRightTrack;
+	bool m_RightTrack;
+
 private:
 	// -------------------------
 	// Disabling default copy constructor and default 
