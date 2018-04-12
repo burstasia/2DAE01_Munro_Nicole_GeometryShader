@@ -8,7 +8,7 @@ class BezierPrefab: public GameObject
 {
 public:
 	BezierPrefab(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3, 
-		float radius, int segs, int circleSides, bool left, bool right);
+		float radius, int segs, int circleSides);
 	~BezierPrefab();
 
 	
@@ -25,8 +25,8 @@ private:
 	bool m_IsLeft;
 	bool m_IsRight;
 
-	MaterialComponentBezier* m_pBezierMatComponent;
-
+	MaterialComponentBezier* m_pBezierMatComponentLeftTrack;
+	MaterialComponentBezier* m_pBezierMatComponentRightTrack;
 private:
 	// -------------------------
 	// Disabling default copy constructor and default 

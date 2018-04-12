@@ -29,8 +29,6 @@ protected:
 	virtual void LoadEffectVariables() override;
 	virtual void UpdateEffectVariables(const GameContext& gameContext, ModelComponent* pModelComponent) override;
 
-	TextureData* m_pDiffuseTexture;
-	static ID3DX11EffectShaderResourceVariable* m_pDiffuseSRVvariable;
 
 	float m_Radius;
 	ID3DX11EffectScalarVariable* m_pRadius;

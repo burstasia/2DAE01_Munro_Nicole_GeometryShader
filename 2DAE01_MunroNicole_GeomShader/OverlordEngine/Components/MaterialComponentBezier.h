@@ -18,7 +18,7 @@ protected:
 private:
 	void LoadEffect(const GameContext& gameContext);
 	void InitializeBuffer(const GameContext& gameContext);
-	void UpdateBuffer();
+	void UpdateBuffer(const GameContext& gameContext);
 
 	ID3D11Buffer * m_pVertexBuffer;
 
@@ -27,7 +27,8 @@ private:
 	ID3D11InputLayout* m_pInputLayout;
 	static ID3DX11EffectMatrixVariable *m_pWorldVar, *m_pWvpVar;
 
-	BezierMaterial *m_pBezierMaterial;
+	BezierMaterial *m_pBezierMaterialLeft;
+
 	UINT m_MaterialID;
 	bool m_MaterialSet;
 

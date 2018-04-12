@@ -17,7 +17,7 @@ MaterialComponentBezier::MaterialComponentBezier(XMFLOAT3 P0, XMFLOAT3 P1, XMFLO
 	m_pInputLayout(nullptr),
 	m_pVertexBuffer(nullptr)
 {
-	m_pBezierMaterial = new BezierMaterial(radius, circleSides, segs, left, right);
+	m_pBezierMaterialLeft = new BezierMaterial(radius, circleSides, segs, left, right);
 	m_Verts.push_back({P0, P1, P2, P3});
 
 }
@@ -25,15 +25,15 @@ MaterialComponentBezier::MaterialComponentBezier(XMFLOAT3 P0, XMFLOAT3 P1, XMFLO
 
 MaterialComponentBezier::~MaterialComponentBezier()
 {
-	SafeDelete(m_pBezierMaterial);
+	SafeDelete(m_pBezierMaterialLeft);
 }
 
 
 void MaterialComponentBezier::LoadEffect(const GameContext & gameContext)
 {
-	m_pBezierMaterial->Initialize(gameContext);
+	m_pBezierMaterialLeft->Initialize(gameContext);
 
-	m_pTechnique = m_pBezierMaterial->m_pEffect->GetTechniqueByIndex(0);
+	m_pTechnique = m_pBezierMaterialLeft->m_pEffect->GetTechniqueByIndex(0);
 
 	std::vector<ILDescription> description;
 	UINT inputLayoutSize;
@@ -41,8 +41,8 @@ void MaterialComponentBezier::LoadEffect(const GameContext & gameContext)
 
 	EffectHelper::BuildInputLayout(gameContext.pDevice, m_pTechnique, &m_pInputLayout, description, inputLayoutSize, inLayID);
 
-	m_pWorldVar = m_pBezierMaterial->m_pEffect->GetVariableBySemantic("World")->AsMatrix();
-	m_pWvpVar = m_pBezierMaterial->m_pEffect->GetVariableBySemantic("WorldViewProjection")->AsMatrix();
+	m_pWorldVar = m_pBezierMaterialLeft->m_pEffect->GetVariableBySemantic("World")->AsMatrix();
+	m_pWvpVar = m_pBezierMaterialLeft->m_pEffect->GetVariableBySemantic("WorldViewProjection")->AsMatrix();
 }
 
 void MaterialComponentBezier::InitializeBuffer(const GameContext & gameContext)
@@ -61,15 +61,20 @@ void MaterialComponentBezier::InitializeBuffer(const GameContext & gameContext)
 	gameContext.pDevice->CreateBuffer(&vertexBuffDesc, NULL, &m_pVertexBuffer);
 }
 
-void MaterialComponentBezier::UpdateBuffer()
+void MaterialComponentBezier::UpdateBuffer(const GameContext& gameContext)
 {
+	auto size = m_Verts.size();
+	if (size == 0)return;
 
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	gameContext.pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
+	memcpy(mappedResource.pData, m_Verts.data(), sizeof(VertexBezier) * size);
+	gameContext.pDeviceContext->Unmap(m_pVertexBuffer, 0);
 }
 
 void MaterialComponentBezier::Update(const GameContext & gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
-
 }
 
 void MaterialComponentBezier::Draw(const GameContext & gameContext)
@@ -95,15 +100,10 @@ void MaterialComponentBezier::Draw(const GameContext & gameContext)
 			m_pWvpVar->SetMatrix(reinterpret_cast<const float*>(&(wvp)));
 		}
 
-		m_pBezierMaterial->UpdateEffectVariables(gameContext, nullptr); 
+		m_pBezierMaterialLeft->UpdateEffectVariables(gameContext, nullptr); 
 	}
 
-	/*auto world = XMLoadFloat4x4(&GetTransform()->GetWorld());
-	auto viewProjection = XMLoadFloat4x4(&gameContext.pCamera->GetViewProjection());
-
-	m_pWorldVar->SetMatrix(reinterpret_cast<float*>(&world));
-	XMMATRIX wvp = world * viewProjection;
-	m_pWvpVar->SetMatrix(reinterpret_cast<float*>(&wvp));*/
+	
 
 	gameContext.pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	gameContext.pDeviceContext->IASetInputLayout(m_pInputLayout);
@@ -128,5 +128,5 @@ void MaterialComponentBezier::Initialize(const GameContext & gameContext)
 
 	LoadEffect(gameContext);
 	InitializeBuffer(gameContext);
-	UpdateBuffer();
+	UpdateBuffer(gameContext);
 }

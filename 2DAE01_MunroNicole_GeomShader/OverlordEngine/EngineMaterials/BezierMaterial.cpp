@@ -7,11 +7,10 @@
 
 
 
-ID3DX11EffectShaderResourceVariable* BezierMaterial::m_pDiffuseSRVvariable = nullptr;
+
 
 BezierMaterial::BezierMaterial(float radius, int numCircleSides, int segmentCount, bool isLeft, bool isRight) :
 	Material(L"./Resources/Effects/Bezier.fx"),
-	m_pDiffuseTexture(nullptr),
 	m_Radius(radius),
 	m_CircleSides(numCircleSides),
 	m_Segments(segmentCount),
