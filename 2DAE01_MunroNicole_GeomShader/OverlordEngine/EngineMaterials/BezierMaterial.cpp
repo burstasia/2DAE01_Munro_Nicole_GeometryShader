@@ -9,14 +9,15 @@
 
 
 
-BezierMaterial::BezierMaterial(float radius, int numCircleSides, int segmentCount, bool isLeft, bool isRight) :
+BezierMaterial::BezierMaterial(float radius, int numCircleSides, int segmentCount, bool isLeft, bool isRight, bool isCrossBeams, bool leftSupport, bool rightSupport) :
 	Material(L"./Resources/Effects/Bezier.fx"),
 	m_Radius(radius),
 	m_CircleSides(numCircleSides),
 	m_Segments(segmentCount),
 	m_IsLeft(isLeft),
-	m_IsRight(isRight)
-
+	m_IsRight(isRight),
+	m_IsCrossBeams(isCrossBeams),
+	m_IsLeftSupport(leftSupport)
 {
 }
 
@@ -75,6 +76,16 @@ void BezierMaterial::SetRight(bool isRight)
 	m_IsRight = isRight;
 }
 
+bool BezierMaterial::GetCrossBeams()
+{
+	return m_IsCrossBeams;
+}
+
+void BezierMaterial::SetCrossBeams(bool isCrossBeams)
+{
+	m_IsCrossBeams = isCrossBeams;
+}
+
 void BezierMaterial::LoadEffectVariables()
 {
 	m_pRadius = m_pEffect->GetVariableByName("gRadius")->AsScalar();
@@ -82,6 +93,9 @@ void BezierMaterial::LoadEffectVariables()
 	m_pCircleSides = m_pEffect->GetVariableByName("gNumCircleSides")->AsScalar();
 	m_pIsRight = m_pEffect->GetVariableByName("gIsRight")->AsScalar();
 	m_pIsLeft = m_pEffect->GetVariableByName("gIsLeft")->AsScalar();
+	m_pIsCrossBeams = m_pEffect->GetVariableByName("gCrossBeam")->AsScalar();
+	m_pIsLeftSupport = m_pEffect->GetVariableByName("gSupportLeft")->AsScalar();
+	m_pIsRightSupport = m_pEffect->GetVariableByName("gSupportRight")->AsScalar();
 }
 
 void BezierMaterial::UpdateEffectVariables(const GameContext& gameContext, ModelComponent* pModelComponent)
@@ -94,4 +108,7 @@ void BezierMaterial::UpdateEffectVariables(const GameContext& gameContext, Model
 	m_pCircleSides->SetInt(m_CircleSides);
 	m_pIsRight->SetBool(m_IsRight);
 	m_pIsLeft->SetBool(m_IsLeft);
+	m_pIsCrossBeams->SetBool(m_IsCrossBeams);
+	m_pIsLeftSupport->SetBool(m_IsLeftSupport);
+	m_pIsRightSupport->SetBool(m_IsRightSupport);
 }

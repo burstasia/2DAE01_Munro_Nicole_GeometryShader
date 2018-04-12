@@ -12,12 +12,12 @@ ID3DX11EffectMatrixVariable* MaterialComponentBezier::m_pWvpVar = nullptr;
 
 
 MaterialComponentBezier::MaterialComponentBezier(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3,
-	float radius, int segs, int circleSides, bool left, bool right) :
+	float radius, int segs, int circleSides, bool left, bool right, bool crossBeams, bool leftSupport, bool rightSupport) :
 	m_pTechnique(nullptr),
 	m_pInputLayout(nullptr),
 	m_pVertexBuffer(nullptr)
 {
-	m_pBezierMaterialLeft = new BezierMaterial(radius, circleSides, segs, left, right);
+	m_pBezierMaterialLeft = new BezierMaterial(radius, circleSides, segs, left, right, crossBeams, leftSupport, rightSupport);
 	m_Verts.push_back({P0, P1, P2, P3});
 
 }

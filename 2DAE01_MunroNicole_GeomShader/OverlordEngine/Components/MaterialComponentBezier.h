@@ -5,7 +5,7 @@ class MaterialComponentBezier : public BaseComponent
 {
 public:
 	MaterialComponentBezier(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3,
-		float radius, int segs, int circleSides, bool left, bool right);
+		float radius, int segs, int circleSides, bool left, bool right, bool crossBeams, bool leftSupport, bool rightSupport);
 	~MaterialComponentBezier();
 
 protected:

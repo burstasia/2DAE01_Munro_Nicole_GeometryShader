@@ -5,7 +5,8 @@ class TextureData;
 class BezierMaterial : public Material
 {
 public:
-	BezierMaterial(float radius, int numCircleSides, int segmentCount, bool isLeft, bool isRight);
+	BezierMaterial(float radius, int numCircleSides, int segmentCount, bool isLeft, bool isRight
+		, bool isCrossBeams, bool leftSupport, bool rightSupport);
 	~BezierMaterial();
 
 	int GetNumSegments();
@@ -22,6 +23,9 @@ public:
 
 	bool GetRight();
 	void SetRight(bool isRight);
+
+	bool GetCrossBeams();
+	void SetCrossBeams(bool isCrossBeams);
 
 protected:
 	friend class MaterialComponentBezier;
@@ -45,6 +49,14 @@ protected:
 	bool m_IsLeft;
 	ID3DX11EffectScalarVariable* m_pIsLeft;
 
+	bool m_IsCrossBeams;
+	ID3DX11EffectScalarVariable* m_pIsCrossBeams;
+
+	bool m_IsLeftSupport;
+	ID3DX11EffectScalarVariable* m_pIsLeftSupport;
+
+	bool m_IsRightSupport;
+	ID3DX11EffectScalarVariable* m_pIsRightSupport;
 private:
 	// -------------------------
 	// Disabling default copy constructor and default 
