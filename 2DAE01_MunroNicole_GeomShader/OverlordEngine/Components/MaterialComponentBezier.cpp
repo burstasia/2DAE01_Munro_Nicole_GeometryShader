@@ -26,7 +26,8 @@ MaterialComponentBezier::MaterialComponentBezier(XMFLOAT3 P0, XMFLOAT3 P1, XMFLO
 MaterialComponentBezier::~MaterialComponentBezier()
 {
 	SafeDelete(m_pBezierMaterialLeft);
-
+	SafeRelease(m_pInputLayout);
+	SafeRelease(m_pVertexBuffer);
 }
 
 
@@ -76,6 +77,7 @@ void MaterialComponentBezier::UpdateBuffer(const GameContext& gameContext)
 void MaterialComponentBezier::Update(const GameContext & gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
+	//m_pBezierMaterialLeft->SetNumSegments
 }
 
 void MaterialComponentBezier::Draw(const GameContext & gameContext)

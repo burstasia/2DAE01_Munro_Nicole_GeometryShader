@@ -27,6 +27,7 @@ void BezierScene::Initialize(const GameContext & gameContext)
 	//m_pBezier_01 = new BezierPrefab({0,9.0f,0}, {2.5f,9,0}, {5,7,0}, {7.5,5,0}, 0.2f, 5, 4);
 	//m_pBezier_02 = new BezierPrefab({ -7.5,5,0 }, { -5,7,0 }, { -2.5f,9,0 }, { 0,9,0 }, 0.2f, 5, 4);
 
+	//works best when z and x is mirrored for the connecting beziers
 	m_pBezier_01 = new BezierPrefab({ 0,9.0f,0 }, { 2.5f,7,2.5f }, { 5,5,5 }, { 7.5,4,9 }, 0.2f, 5, 4);
 	m_pBezier_02 = new BezierPrefab({ -7.5,10,-11 }, { -5,12,-5 }, { -2.5f,10.5,-2.5 }, { 0,9,0 }, 0.2f, 5, 4);
 	//m_pBezier_03 = new BezierPrefab({ 15,9,0 }, { 17.5,11,0 }, { 20,12,0 }, { 22.5,10,0 }, 0.2f, 10, 4);
