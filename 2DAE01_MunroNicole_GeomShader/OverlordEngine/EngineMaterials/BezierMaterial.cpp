@@ -17,7 +17,8 @@ BezierMaterial::BezierMaterial(float radius, int numCircleSides, int segmentCoun
 	m_IsLeft(isLeft),
 	m_IsRight(isRight),
 	m_IsCrossBeams(isCrossBeams),
-	m_IsLeftSupport(leftSupport)
+	m_IsLeftSupport(leftSupport),
+	m_IsRightSupport(rightSupport)
 {
 }
 
@@ -96,6 +97,7 @@ void BezierMaterial::LoadEffectVariables()
 	m_pIsCrossBeams = m_pEffect->GetVariableByName("gCrossBeam")->AsScalar();
 	m_pIsLeftSupport = m_pEffect->GetVariableByName("gSupportLeft")->AsScalar();
 	m_pIsRightSupport = m_pEffect->GetVariableByName("gSupportRight")->AsScalar();
+
 }
 
 void BezierMaterial::UpdateEffectVariables(const GameContext& gameContext, ModelComponent* pModelComponent)

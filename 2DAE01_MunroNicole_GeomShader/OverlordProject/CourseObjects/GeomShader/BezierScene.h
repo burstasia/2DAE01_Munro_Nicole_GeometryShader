@@ -16,8 +16,9 @@ protected:
 	virtual void Draw(const GameContext& gameContext);
 
 private:
-	BezierPrefab * m_pBezier;
-
+	BezierPrefab * m_pBezier_01;
+	BezierPrefab * m_pBezier_02;
+	//BezierPrefab * m_pBezier_03;
 private:
 	// -------------------------
 	// Disabling default copy constructor and default 

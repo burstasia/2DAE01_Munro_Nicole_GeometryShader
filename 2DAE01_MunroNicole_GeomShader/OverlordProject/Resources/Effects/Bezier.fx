@@ -1,6 +1,7 @@
 float4x4 gWorld : WORLD;
 float4x4 gWorldViewProj : WORLDVIEWPROJECTION; 
-float3 gLightDirection = float3(-0.577f, -0.577f, 0.577f);
+//float3 gLightDirection = float3(-0.577f, -0.577f, 0.577f);
+float3 gLightDirection = float3(1.0f, 1.0f, 1.0f);
 int gNumSegments;
 int gNumCircleSides;
 bool gIsLeft;
@@ -9,6 +10,7 @@ bool gCrossBeam;
 bool gSupportLeft;
 bool gSupportRight;
 float gRadius;
+
 static const float TWO_PI = 6.28318530718f;
 
 struct VS_INPUT{
@@ -67,6 +69,16 @@ void CreateVertex(inout TriangleStream<GS_OUTPUT> triStream, float3 pos, float3 
 
 }
 
+float3 CalculateSurfaceNormal(float3 P0, float3 P1, float3 P2 )
+{
+    float3 normal;
+    float3 U = P1 - P0;
+    float3 V = P2 - P0;
+
+    normal = cross(U, V);
+
+    return normal;
+}
 //--------------------------------------------------------------------------------------
 // Geometry Shader
 //--------------------------------------------------------------------------------------
@@ -89,9 +101,9 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
 
     float3 leftTrackVerts[70];
     float3 rightTrackVerts[70];
-    float3 crossBeamVerts[40];
-    float3 supportLeftVerts[20];
-    float3 supportRightVerts[20];
+    float3 crossBeamVerts[100];
+    float3 supportLeftVerts[80];
+    float3 supportRightVerts[80];
 
     float offset = 1.75f;
 
@@ -134,7 +146,6 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
                 float3 x = gRadius * cos(currAngle) * right;
 
                 leftTrackVerts[(gNumCircleSides * i) + l] = y + x + first - (right * 1.75f);
-
                 currAngle += angleIncrement;
             
             }
@@ -179,25 +190,28 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
             
         }
 
-        if(gSupportLeft)
+        if (gSupportLeft == true)
         {
+           
             float3 rightTop = first + (widthSupport * forwardVec * 0.5f * -1.0f) + (-1.0f * offset * right);
             float3 leftTop = first + (widthSupport * forwardVec * 0.5f) + (-1.0f * offset * right);
             float3 leftBottom = first + (up * (-1.0f * first.y)) + (widthSupport * forwardVec * 0.5f) + (-1.0f * offset * right);
             float3 rightBottom = first + (up * (-1.0f * first.y)) + (widthSupport * forwardVec * 0.5f * -1.0f) + (-1.0f * offset * right);
 
-            supportLeftVerts[(i * 4) + 0] = rightTop;
-            supportLeftVerts[(i * 4) + 1] = leftTop;
-            supportLeftVerts[(i * 4) + 2] = leftBottom;
-            supportLeftVerts[(i * 4) + 3] = rightBottom;
+            supportLeftVerts[(i * 4 ) + 0] = rightTop;
+            supportLeftVerts[(i * 4 ) + 1] = leftTop;
+            supportLeftVerts[(i * 4 ) + 2] = leftBottom;
+            supportLeftVerts[(i * 4 ) + 3] = rightBottom;
+           
+            
 
         }
-        if (gSupportRight)
+        if (gSupportRight == true)
         {
             float3 rightTop = first + (widthSupport * forwardVec * 0.5f * -1.0f) + (offset * right);
             float3 leftTop = first + (widthSupport * forwardVec * 0.5f) + (offset * right);
             float3 leftBottom = first + (up * (-1.0f * first.y)) + (widthSupport * forwardVec * 0.5f) + (offset * right);
-            float3 rightBottom = first + (up * (-1.0f * first.y)) + (widthSupport * forwardVec * 0.5f * -1.0f) + ( offset * right);
+            float3 rightBottom = first + (up * (-1.0f * first.y)) + (widthSupport * forwardVec * 0.5f * -1.0f) + (offset * right);
 
             supportRightVerts[(i * 4) + 0] = rightTop;
             supportRightVerts[(i * 4) + 1] = leftTop;
@@ -216,10 +230,12 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
             for (int j = 0; j < gNumCircleSides; j++)
             {
            
-                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
-                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
-                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
-                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
+                float3 normal = CalculateSurfaceNormal(leftTrackVerts[(gNumCircleSides * k) + j], leftTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides]);
+
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j], normal, float3(0.65f, 0.65f, 0.65f));
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], normal, float3(0.65f, 0.65f, 0.65f));
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], normal, float3(0.65f, 0.65f, 0.65f));
+                CreateVertex(triStream, leftTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], normal, float3(0.65f, 0.65f, 0.65f));
 
                 triStream.RestartStrip();
             }
@@ -236,10 +252,12 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
             for (int j = 0; j < gNumCircleSides; j++)
             {
            
-                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
-                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
-                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
-                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], float3(0.65f, 0.65f, 0.65f), float3(0.65f, 0.65f, 0.65f));
+                float3 normal = CalculateSurfaceNormal(rightTrackVerts[(gNumCircleSides * k) + j], rightTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides]);
+
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j], normal, float3(0.65f, 0.65f, 0.65f));
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + j + gNumCircleSides], normal, float3(0.65f, 0.65f, 0.65f));
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides], normal, float3(0.65f, 0.65f, 0.65f));
+                CreateVertex(triStream, rightTrackVerts[(gNumCircleSides * k) + (j + 1) % gNumCircleSides + gNumCircleSides], normal, float3(0.65f, 0.65f, 0.65f));
 
                 triStream.RestartStrip();
             }
@@ -252,15 +270,16 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
     if (gCrossBeam == true)
     {
       
-        for (int k = 0; k < gNumSegments; k++)
+        for (int k = 0; k <= gNumSegments; k++)
         {
             for (int j = 0; j < (boxVerts / 2); j++)
             {
-           
-                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + j], float3(0.65f, 0.65f, 0.65f), brown);
-                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + j + (boxVerts / 2)], float3(0.65f, 0.65f, 0.65f), brown);
-                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + (j + 1) % (boxVerts / 2)], float3(0.65f, 0.65f, 0.65f), brown);
-                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + (j + 1) % (boxVerts / 2) + (boxVerts / 2)], float3(0.65f, 0.65f, 0.65f), brown);
+                float3 normal = CalculateSurfaceNormal(crossBeamVerts[(boxVerts * k) + j], crossBeamVerts[(boxVerts * k) + j + (boxVerts / 2)], crossBeamVerts[(boxVerts * k) + (j + 1) % (boxVerts / 2)]);
+
+                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + j], normal, brown);
+                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + j + (boxVerts / 2)], normal, brown);
+                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + (j + 1) % (boxVerts / 2)], normal, brown);
+                CreateVertex(triStream, crossBeamVerts[(boxVerts * k) + (j + 1) % (boxVerts / 2) + (boxVerts / 2)], normal, brown);
 
             }
             
@@ -270,14 +289,16 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
     }
 
     // create triangles support
-    if(gSupportLeft == true)
+    if (gSupportLeft == true)
     {
-        for (int k = 0; k < gNumSegments; k++)
+        for (int k = 0; k <= gNumSegments; k++)
         {
-            CreateVertex(triStream, supportLeftVerts[k * 4], float3(0.65f, 0.65f, 0.65f), brown);
-            CreateVertex(triStream, supportLeftVerts[(k * 4) + 3], float3(0.65f, 0.65f, 0.65f), brown);
-            CreateVertex(triStream, supportLeftVerts[(k * 4) + 1], float3(0.65f, 0.65f, 0.65f), brown);
-            CreateVertex(triStream, supportLeftVerts[(k * 4) + 2], float3(0.65f, 0.65f, 0.65f), brown);
+            float3 normal = CalculateSurfaceNormal(supportLeftVerts[k * 4], supportLeftVerts[(k * 4) + 3], supportLeftVerts[(k * 4) + 1]);
+
+            CreateVertex(triStream, supportLeftVerts[k * 4], normal, brown);
+            CreateVertex(triStream, supportLeftVerts[(k * 4) + 3], normal, brown);
+            CreateVertex(triStream, supportLeftVerts[(k * 4) + 1], normal, brown);
+            CreateVertex(triStream, supportLeftVerts[(k * 4) + 2], normal, brown);
 
             triStream.RestartStrip();
         }
@@ -285,12 +306,14 @@ void GS(point VS_INPUT input[1], inout TriangleStream<GS_OUTPUT> triStream)
 
     if (gSupportRight == true)
     {
-        for (int k = 0; k < gNumSegments; k++)
+        for (int k = 0; k <= gNumSegments; k++)
         {
-            CreateVertex(triStream, supportRightVerts[k * 4], float3(0.65f, 0.65f, 0.65f), brown);
-            CreateVertex(triStream, supportRightVerts[(k * 4) + 3], float3(0.65f, 0.65f, 0.65f), brown);
-            CreateVertex(triStream, supportRightVerts[(k * 4) + 1], float3(0.65f, 0.65f, 0.65f), brown);
-            CreateVertex(triStream, supportRightVerts[(k * 4) + 2], float3(0.65f, 0.65f, 0.65f), brown);
+            float3 normal = CalculateSurfaceNormal(supportRightVerts[k * 4], supportRightVerts[(k * 4) + 3], supportRightVerts[(k * 4) + 1]);
+
+            CreateVertex(triStream, supportRightVerts[k * 4], normal, brown);
+            CreateVertex(triStream, supportRightVerts[(k * 4) + 3], normal, brown);
+            CreateVertex(triStream, supportRightVerts[(k * 4) + 1], normal, brown);
+            CreateVertex(triStream, supportRightVerts[(k * 4) + 2], normal, brown);
 
             triStream.RestartStrip();
         }

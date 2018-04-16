@@ -26,6 +26,7 @@ MaterialComponentBezier::MaterialComponentBezier(XMFLOAT3 P0, XMFLOAT3 P1, XMFLO
 MaterialComponentBezier::~MaterialComponentBezier()
 {
 	SafeDelete(m_pBezierMaterialLeft);
+
 }
 
 

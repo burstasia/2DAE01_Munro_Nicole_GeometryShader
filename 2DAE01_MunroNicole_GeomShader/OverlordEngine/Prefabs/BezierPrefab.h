@@ -29,7 +29,8 @@ private:
 	MaterialComponentBezier* m_pBezierMatComponentRightTrack;
 	MaterialComponentBezier* m_pBezierMatComponentBeams;
 	MaterialComponentBezier* m_pBezierMatComponentSupportsLeft;
-	MaterialComponentBezier* m_pBezierMatComponentSupportsRight;
+MaterialComponentBezier* m_pBezierMatComponentSupportsRight;
+
 private:
 	// -------------------------
 	// Disabling default copy constructor and default 
