@@ -44,11 +44,26 @@ void BezierScene::Initialize(const GameContext & gameContext)
 	//skyBox
 	auto skybox = new SkyBoxPrefab();
 	AddChild(skybox);
+
+	//register input actions
+	gameContext.pInput->AddInputAction(InputAction(InputActions::DECREASE_SEGS, Pressed,VK_DOWN));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::INCREASE_SEGS, Pressed,VK_UP));
 }
 
 void BezierScene::Update(const GameContext & gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
+
+	if (gameContext.pInput->IsActionTriggered(InputActions::INCREASE_SEGS))
+	{
+		m_pBezier_01->IncreaseSegments(gameContext);
+		m_pBezier_02->IncreaseSegments(gameContext);
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::DECREASE_SEGS))
+	{
+		m_pBezier_01->DecreaseSegments(gameContext);
+		m_pBezier_02->DecreaseSegments(gameContext);
+	}
 }
 
 void BezierScene::Draw(const GameContext & gameContext)

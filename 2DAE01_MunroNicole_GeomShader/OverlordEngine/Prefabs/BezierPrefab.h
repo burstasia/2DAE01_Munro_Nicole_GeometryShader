@@ -11,7 +11,8 @@ public:
 		float radius, int segs, int circleSides);
 	~BezierPrefab();
 
-	
+	void IncreaseSegments(const GameContext& gameContext);
+	void DecreaseSegments(const GameContext& gameContext);
 protected:
 	virtual void Update(const GameContext& gameContext) override;
 	virtual void Draw(const GameContext& gameContext) override;
@@ -29,7 +30,7 @@ private:
 	MaterialComponentBezier* m_pBezierMatComponentRightTrack;
 	MaterialComponentBezier* m_pBezierMatComponentBeams;
 	MaterialComponentBezier* m_pBezierMatComponentSupportsLeft;
-MaterialComponentBezier* m_pBezierMatComponentSupportsRight;
+	MaterialComponentBezier* m_pBezierMatComponentSupportsRight;
 
 private:
 	// -------------------------

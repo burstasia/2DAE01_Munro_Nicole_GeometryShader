@@ -28,6 +28,43 @@ BezierPrefab::~BezierPrefab()
 {
 }
 
+void BezierPrefab::IncreaseSegments(const GameContext & gameContext)
+{
+	int segs = m_pBezierMatComponentLeftTrack->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentLeftTrack->m_pBezierMaterialLeft->SetNumSegments(++segs);
+
+	segs = m_pBezierMatComponentRightTrack->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentRightTrack->m_pBezierMaterialLeft->SetNumSegments(++segs);
+
+	segs = m_pBezierMatComponentBeams->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentBeams->m_pBezierMaterialLeft->SetNumSegments(++segs);
+
+	segs = m_pBezierMatComponentSupportsLeft->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentSupportsLeft->m_pBezierMaterialLeft->SetNumSegments(++segs);
+
+	segs = m_pBezierMatComponentSupportsRight->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentSupportsRight->m_pBezierMaterialLeft->SetNumSegments(++segs);
+
+}
+
+void BezierPrefab::DecreaseSegments(const GameContext & gameContext)
+{
+	int segs = m_pBezierMatComponentLeftTrack->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentLeftTrack->m_pBezierMaterialLeft->SetNumSegments(--segs);
+
+	segs = m_pBezierMatComponentRightTrack->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentRightTrack->m_pBezierMaterialLeft->SetNumSegments(--segs);
+
+	segs = m_pBezierMatComponentBeams->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentBeams->m_pBezierMaterialLeft->SetNumSegments(--segs);
+
+	segs = m_pBezierMatComponentSupportsLeft->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentSupportsLeft->m_pBezierMaterialLeft->SetNumSegments(--segs);
+
+	segs = m_pBezierMatComponentSupportsRight->m_pBezierMaterialLeft->GetNumSegments();
+	m_pBezierMatComponentSupportsRight->m_pBezierMaterialLeft->SetNumSegments(--segs);
+}
+
 
 void BezierPrefab::Initialize(const GameContext& gameContext)
 {

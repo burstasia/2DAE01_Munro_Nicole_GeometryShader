@@ -8,18 +8,15 @@ public:
 		float radius, int segs, int circleSides, bool left, bool right, bool crossBeams, bool leftSupport, bool rightSupport);
 	~MaterialComponentBezier();
 
-	enum InputActions : UINT
-	{
-		INCREASE_SEGS,
-		DECREASE_SEGS
-
-	};
+	
 protected:
 	friend class BezierPrefab;
 
 	void Update(const GameContext& gameContext) override;
 	void Draw(const GameContext& gameContext) override;
 	void Initialize(const GameContext& gameContext) override;
+
+	BezierMaterial *m_pBezierMaterialLeft;
 
 private:
 	void LoadEffect(const GameContext& gameContext);
@@ -33,7 +30,7 @@ private:
 	ID3D11InputLayout* m_pInputLayout;
 	static ID3DX11EffectMatrixVariable *m_pWorldVar, *m_pWvpVar;
 
-	BezierMaterial *m_pBezierMaterialLeft;
+	
 
 	UINT m_MaterialID;
 	bool m_MaterialSet;

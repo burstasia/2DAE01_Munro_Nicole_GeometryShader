@@ -9,6 +9,14 @@ public:
 	BezierScene();
 	virtual ~BezierScene();
 
+	enum InputActions : UINT
+	{
+		INCREASE_SEGS,
+		DECREASE_SEGS
+
+	};
+
+
 protected:
 
 	virtual void Initialize(const GameContext& gameContext);
