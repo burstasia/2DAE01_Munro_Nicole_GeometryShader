@@ -8,6 +8,12 @@ public:
 		float radius, int segs, int circleSides, bool left, bool right, bool crossBeams, bool leftSupport, bool rightSupport);
 	~MaterialComponentBezier();
 
+	enum InputActions : UINT
+	{
+		INCREASE_SEGS,
+		DECREASE_SEGS
+
+	};
 protected:
 	friend class BezierPrefab;
 

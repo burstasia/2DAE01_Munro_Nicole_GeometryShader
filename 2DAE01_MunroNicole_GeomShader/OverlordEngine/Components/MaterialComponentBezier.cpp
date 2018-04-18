@@ -78,6 +78,8 @@ void MaterialComponentBezier::Update(const GameContext & gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
 	//m_pBezierMaterialLeft->SetNumSegments
+
+	if(gameContext.pInput->IsActionTriggered())
 }
 
 void MaterialComponentBezier::Draw(const GameContext & gameContext)
@@ -132,4 +134,8 @@ void MaterialComponentBezier::Initialize(const GameContext & gameContext)
 	LoadEffect(gameContext);
 	InitializeBuffer(gameContext);
 	UpdateBuffer(gameContext);
+
+	//register input actions
+	gameContext.pInput->AddInputAction((InputActions::DECREASE_SEGS, VK_DOWN));
+	gameContext.pInput->AddInputAction((InputActions::INCREASE_SEGS, VK_UP));
 }

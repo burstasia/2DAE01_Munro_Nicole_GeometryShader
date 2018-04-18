@@ -1,4 +1,4 @@
-#pragma once
+(#pragma once
 #include "Scenegraph/GameScene.h"
 
 class ModelComponent;
