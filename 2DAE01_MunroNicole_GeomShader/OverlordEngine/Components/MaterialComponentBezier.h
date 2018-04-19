@@ -18,10 +18,11 @@ protected:
 
 	BezierMaterial *m_pBezierMaterialLeft;
 
+	void UpdateBezierPoints(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3);
 private:
 	void LoadEffect(const GameContext& gameContext);
 	void InitializeBuffer(const GameContext& gameContext);
-	void UpdateBuffer(const GameContext& gameContext);
+	void UpdateBuffer(/*const GameContext& gameContext*/);
 
 	ID3D11Buffer * m_pVertexBuffer;
 

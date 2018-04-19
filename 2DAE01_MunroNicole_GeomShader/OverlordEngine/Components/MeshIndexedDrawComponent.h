@@ -22,10 +22,13 @@ public:
 
 protected:
 	
+	friend class SpherePrefab;
+
 	virtual void Update(const GameContext& context);
 	virtual void Draw(const GameContext& context);
 	virtual void Initialize(const GameContext& gameContext);
 
+	vector<VertexPosNormCol> m_vecVertices;
 private:
 
 	
@@ -33,7 +36,7 @@ private:
 	void InitializeVertexBuffer(const GameContext& gameContext);
 	void InitializeIndexBuffer(const GameContext& gameContext);
 
-	vector<VertexPosNormCol> m_vecVertices;
+	
 	vector<UINT> m_vecIndices;
 
 	ID3D11Buffer *m_pVertexBuffer, *m_pIndexBuffer;

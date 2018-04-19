@@ -31,6 +31,14 @@ MaterialComponentBezier::~MaterialComponentBezier()
 }
 
 
+void MaterialComponentBezier::UpdateBezierPoints(XMFLOAT3 P0, XMFLOAT3 P1, XMFLOAT3 P2, XMFLOAT3 P3)
+{
+	m_Verts.at(0).P0 = P0;
+	m_Verts.at(0).P1 = P1;
+	m_Verts.at(0).P2 = P2;
+	m_Verts.at(0).P3 = P3;
+}
+
 void MaterialComponentBezier::LoadEffect(const GameContext & gameContext)
 {
 	m_pBezierMaterialLeft->Initialize(gameContext);
@@ -55,21 +63,25 @@ void MaterialComponentBezier::InitializeBuffer(const GameContext & gameContext)
 	//*************
 	//VERTEX BUFFER
 	D3D11_BUFFER_DESC vertexBuffDesc;
-	vertexBuffDesc.BindFlags = D3D10_BIND_FLAG::D3D10_BIND_VERTEX_BUFFER;
+	vertexBuffDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
 	vertexBuffDesc.ByteWidth = sizeof(VertexBezier) *m_Verts.size();
-	vertexBuffDesc.CPUAccessFlags = D3D10_CPU_ACCESS_FLAG::D3D10_CPU_ACCESS_WRITE;
+	vertexBuffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
 	vertexBuffDesc.Usage = D3D11_USAGE::D3D11_USAGE_DYNAMIC;
 	vertexBuffDesc.MiscFlags = 0;
+	vertexBuffDesc.StructureByteStride = sizeof(VertexBezier);
 	gameContext.pDevice->CreateBuffer(&vertexBuffDesc, NULL, &m_pVertexBuffer);
 }
 
-void MaterialComponentBezier::UpdateBuffer(const GameContext& gameContext)
+void MaterialComponentBezier::UpdateBuffer(/*const GameContext& gameContext*/)
 {
 	auto size = m_Verts.size();
 	if (size == 0)return;
+	if (m_pVertexBuffer == nullptr) return;
+
+	GameContext gameContext = m_pGameObject->GetScene()->GetGameContext();
 
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	gameContext.pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &mappedResource);
+	gameContext.pDeviceContext->Map(m_pVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	memcpy(mappedResource.pData, m_Verts.data(), sizeof(VertexBezier) * size);
 	gameContext.pDeviceContext->Unmap(m_pVertexBuffer, 0);
 }
@@ -77,8 +89,7 @@ void MaterialComponentBezier::UpdateBuffer(const GameContext& gameContext)
 void MaterialComponentBezier::Update(const GameContext & gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
-	//m_pBezierMaterialLeft->SetNumSegments
-
+	UpdateBuffer();
 	
 }
 
@@ -133,7 +144,7 @@ void MaterialComponentBezier::Initialize(const GameContext & gameContext)
 
 	LoadEffect(gameContext);
 	InitializeBuffer(gameContext);
-	UpdateBuffer(gameContext);
+	UpdateBuffer(/*gameContext*/);
 
 	
 }

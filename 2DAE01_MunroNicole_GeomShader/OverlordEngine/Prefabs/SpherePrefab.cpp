@@ -17,23 +17,29 @@ SpherePrefab::~SpherePrefab(void)
 {
 }
 
+void SpherePrefab::UpdateColour(XMFLOAT4 colour)
+{
+	m_Color = colour;
+	UpdateBuffer(*m_pMesh);
+}
+
 void SpherePrefab::Initialize(const GameContext& gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
 	//Create Cube
 	auto vertCount = m_Steps * (m_Steps-1) + 2;
-	auto mesh = new MeshIndexedDrawComponent(vertCount, ((m_Steps-2)*m_Steps*6)+(6*m_Steps));
-	
+	m_pMesh = new MeshIndexedDrawComponent(vertCount, ((m_Steps-2)*m_Steps*6)+(6*m_Steps));
+
 	//**SPHERE**
 
 	//Vertices
-	float deltaTheta = XM_PI/m_Steps;
+	float deltaTheta = XM_PI / m_Steps;
 	float deltaPhi = XM_2PI / m_Steps;
 	float theta = 0;
 	float phi = 0;
 
 	//TOP
-	mesh->AddVertex(VertexPosNormCol(XMFLOAT3(0,m_Radius,0), XMFLOAT3(0,1,0), m_Color));
+	m_pMesh->AddVertex(VertexPosNormCol(XMFLOAT3(0, m_Radius, 0), XMFLOAT3(0, 1, 0), m_Color));
 
 	//SPHERE
 	for (int i = 0; i < m_Steps - 1; ++i)
@@ -51,29 +57,29 @@ void SpherePrefab::Initialize(const GameContext& gameContext)
 			XMFLOAT3 normal;
 			XMStoreFloat3(&normal, XMVector3Normalize(vPos));
 
-			mesh->AddVertex(VertexPosNormCol(pos, normal, m_Color));
+			m_pMesh->AddVertex(VertexPosNormCol(pos, normal, m_Color));
 		}
 	}
 
 	//BOTTOM
-	mesh->AddVertex(VertexPosNormCol(XMFLOAT3(0, -m_Radius, 0), XMFLOAT3(0, -1, 0), m_Color));
-	
+	m_pMesh->AddVertex(VertexPosNormCol(XMFLOAT3(0, -m_Radius, 0), XMFLOAT3(0, -1, 0), m_Color));
+
 	//Indices
 	//TOP
-	for (DWORD i = 1; i < (DWORD) m_Steps + 1; ++i)
+	for (DWORD i = 1; i < (DWORD)m_Steps + 1; ++i)
 	{
-		mesh->AddIndex(i);
+		m_pMesh->AddIndex(i);
 
 		DWORD v1 = i + 1;
 		if (i%m_Steps == 0)
 			v1 -= m_Steps;
 
-		mesh->AddIndex(v1);
-		mesh->AddIndex(0);
+		m_pMesh->AddIndex(v1);
+		m_pMesh->AddIndex(0);
 	}
 
 	//MIDDLE
-	for (DWORD i = 1; i < (DWORD) vertCount - 1 - m_Steps; ++i)
+	for (DWORD i = 1; i < (DWORD)vertCount - 1 - m_Steps; ++i)
 	{
 		DWORD v0, v1, v2, v3;
 		v0 = i;
@@ -85,27 +91,37 @@ void SpherePrefab::Initialize(const GameContext& gameContext)
 		v2 = v1 + m_Steps;
 		v3 = v0 + m_Steps;
 
-		mesh->AddIndex(v0);
-		mesh->AddIndex(v1);
-		mesh->AddIndex(v2);
-		mesh->AddIndex(v2);
-		mesh->AddIndex(v3);
-		mesh->AddIndex(v0);
+		m_pMesh->AddIndex(v0);
+		m_pMesh->AddIndex(v1);
+		m_pMesh->AddIndex(v2);
+		m_pMesh->AddIndex(v2);
+		m_pMesh->AddIndex(v3);
+		m_pMesh->AddIndex(v0);
 	}
 
 	//BOTTOM
-	for (DWORD i = vertCount - m_Steps - 1; i < (DWORD) vertCount - 1; ++i)
+	for (DWORD i = vertCount - m_Steps - 1; i < (DWORD)vertCount - 1; ++i)
 	{
-		mesh->AddIndex(i);
+		m_pMesh->AddIndex(i);
 
 		DWORD v1 = i + 1;
 		if (i%m_Steps == 0)
 			v1 -= m_Steps;
 
-		mesh->AddIndex(v1);
-		mesh->AddIndex(vertCount - 1);
+		m_pMesh->AddIndex(v1);
+		m_pMesh->AddIndex(vertCount - 1);
 	}
 
-
-	AddComponent(mesh);
+	AddComponent(m_pMesh);
 }
+
+void SpherePrefab::UpdateBuffer(MeshIndexedDrawComponent & mesh)
+{
+	for (size_t i = 0; i < mesh.m_vecVertices.size(); i++)
+	{
+		mesh.m_vecVertices.at(i).Color = m_Color;
+	}
+
+	mesh.UpdateVertexBuffer();
+}
+

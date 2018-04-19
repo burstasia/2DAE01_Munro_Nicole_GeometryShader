@@ -17,16 +17,6 @@ void BezierScene::Initialize(const GameContext & gameContext)
 {
 	UNREFERENCED_PARAMETER(gameContext);
 
-	/*m_pBezier_01 = new BezierPrefab({ 0, 2, 0 }, { 2.5f, 2, 0 }, { 7.5f, 4, 0 }, { 7.5f, 5, 0 }, 0.2f, 4, 6);
-	m_pBezier_02 = new BezierPrefab({ 7.5f, 5, 0 }, { 7.5f, 6, 0 }, { 12.5, 7, 0 }, { 15, 8, 0 }, 0.2f, 4, 6);
-	m_pBezier_03 = new BezierPrefab({ 15, 8, 0 }, { 17.5f, 9, 0 }, { 20, 10, 0 }, { 22.5, 11, 0 }, 0.2f, 4, 6);*/
-
-	//m_pBezier_01 = new BezierPrefab({ 0,10.0f,0 }, { 2.5f,8,2.5f }, { 5,2.5,5 }, { 7.5,2.5,7.5 }, 0.2f, 5, 4);
-	//m_pBezier_02 = new BezierPrefab({ -7.5,2.5,-7.5 }, { -5,2.5,-5 }, { -2.5f,8,-2.5f }, { 0,10.0f,0 }, 0.2f, 5, 4);
-
-	//m_pBezier_01 = new BezierPrefab({0,9.0f,0}, {2.5f,9,0}, {5,7,0}, {7.5,5,0}, 0.2f, 5, 4);
-	//m_pBezier_02 = new BezierPrefab({ -7.5,5,0 }, { -5,7,0 }, { -2.5f,9,0 }, { 0,9,0 }, 0.2f, 5, 4);
-
 	//works best when z and x is mirrored for the connecting beziers
 	m_pBezier_01 = new BezierPrefab({ 0,9.0f,0 }, { 2.5f,7,2.5f }, { 5,5,5 }, { 7.5,4,9 }, 0.2f, 5, 4);
 	m_pBezier_02 = new BezierPrefab({ -7.5,10,-11 }, { -5,12,-5 }, { -2.5f,10.5,-2.5 }, { 0,9,0 }, 0.2f, 5, 4);
@@ -48,6 +38,14 @@ void BezierScene::Initialize(const GameContext & gameContext)
 	//register input actions
 	gameContext.pInput->AddInputAction(InputAction(InputActions::DECREASE_SEGS, Pressed,VK_DOWN));
 	gameContext.pInput->AddInputAction(InputAction(InputActions::INCREASE_SEGS, Pressed,VK_UP));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::SWITCH_BEZIERS, Pressed, VK_RIGHT));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::SWITCH_ACTIVE_POINT, Pressed, VK_LEFT));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::MOVE_X_POS, Pressed, 'T'));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::MOVE_X_NEG, Pressed, 'G'));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::MOVE_Y_POS, Pressed, 'Y'));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::MOVE_Y_NEG, Pressed, 'H'));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::MOVE_Z_POS, Pressed, 'U'));
+	gameContext.pInput->AddInputAction(InputAction(InputActions::MOVE_Z_NEG, Pressed, 'J'));
 }
 
 void BezierScene::Update(const GameContext & gameContext)
@@ -63,6 +61,49 @@ void BezierScene::Update(const GameContext & gameContext)
 	{
 		m_pBezier_01->DecreaseSegments(gameContext);
 		m_pBezier_02->DecreaseSegments(gameContext);
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::SWITCH_BEZIERS))
+	{
+		bool active = m_pBezier_01->GetIsActive();
+		m_pBezier_01->SetActive(!active);
+
+		m_pBezier_02->SetActive(active);
+
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::SWITCH_ACTIVE_POINT))
+	{
+		if (m_pBezier_01->GetIsActive()) m_pBezier_01->SwitchActivePoint();
+		else m_pBezier_02->SwitchActivePoint();
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::MOVE_X_POS))
+	{
+		if (m_pBezier_01->GetIsActive()) m_pBezier_01->MoveX(1.0f);
+		else m_pBezier_02->MoveX(1.0f);
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::MOVE_X_NEG))
+	{
+		if (m_pBezier_01->GetIsActive()) m_pBezier_01->MoveX(-1.0f);
+		else m_pBezier_02->MoveX(-1.0f);
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::MOVE_Y_POS))
+	{
+		if (m_pBezier_01->GetIsActive()) m_pBezier_01->MoveY(1.0f);
+		else m_pBezier_02->MoveY(1.0f);
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::MOVE_Y_NEG))
+	{
+		if (m_pBezier_01->GetIsActive()) m_pBezier_01->MoveY(-1.0f);
+		else m_pBezier_02->MoveY(-1.0f);
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::MOVE_Z_POS))
+	{
+		if (m_pBezier_01->GetIsActive()) m_pBezier_01->MoveZ(1.0f);
+		else m_pBezier_02->MoveZ(1.0f);
+	}
+	if (gameContext.pInput->IsActionTriggered(InputActions::MOVE_Z_NEG))
+	{
+		if (m_pBezier_01->GetIsActive()) m_pBezier_01->MoveZ(-1.0f);
+		else m_pBezier_02->MoveZ(-1.0f);
 	}
 }
 
